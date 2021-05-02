@@ -24,6 +24,7 @@ HOSP_INFO = ['MSA','OWNER','HOSPCODE']
 DEFAULT_CACHE_DIR = os.path.join(os.path.expanduser('~'), 'data')
 
 ED_SPSS = [
+    'ED2018-spss.zip',
     'ED2017-spss.zip',
     'ed2016-spss.zip',
     'ed2015-spss.zip',
