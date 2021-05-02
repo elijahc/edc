@@ -1,0 +1,8 @@
+numpy>=1.7.1
+pandas
+pyreadstat
+scipy
+nose>=1.0
+# keras
+tqdm
+imageio
