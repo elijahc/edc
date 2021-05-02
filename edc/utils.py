@@ -1,6 +1,8 @@
 import os
 import urllib.request
+import requests
 import wget
+import keyring
 
 import zipfile
 import tarfile
@@ -97,3 +99,30 @@ def get_file(fname,
         _extract_archive(fpath,datadir,archive_format)
 
     return fpath
+
+def get_airtable(base_id, table_name, api_key):
+    url = "https://api.airtable.com/v0/{}/{}".format(base_id,table_name)
+
+    headers = {'Authorization': 'Bearer {}'.format(api_key)}
+
+    params = ()
+    airtable_records = []
+    run = True
+    while run is True:
+        response = requests.get(url, headers=headers, params=params)
+        airtable_response = response.json()
+        airtable_records.extend(airtable_response['records'])
+        if 'offset' in airtable_response.keys():
+            run = True
+            params = (('offset', airtable_response['offset']),)
+        else:
+            run = False
+
+    return airtable_records
+
+def get_CUMSTP(table_name='Current Students'):
+    api_key = keyring.get_password('airtable','CUMSTP_API_KEY')
+    base = keyring.get_password('airtable','CUMSTP_BASE_ID')
+    recs = get_airtable(base,table_name,api_key)
+    recs = [r['fields'] for r in recs]
+    return recs
